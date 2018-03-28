@@ -1,4 +1,7 @@
 # react-native-collapsible-header
+
+[![npm version](https://badge.fury.io/js/react-native-collapsible-header.svg)](https://badge.fury.io/js/react-native-collapsible-header)
+
 <img src="https://raw.githubusercontent.com/sonaye/react-native-collapsible-header/master/demo1.gif" width="400">
 
 Can also be utilized to create a parallax scrolling effect.
