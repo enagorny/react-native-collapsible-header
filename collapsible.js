@@ -57,7 +57,7 @@ export default class Collapsible extends Component {
     );
 
     const contentContainerStyle = [
-      { paddingBottom: this.props.min },
+      { paddingBottom: min },
       scrollViewProps.contentContainerStyle
     ];
 
