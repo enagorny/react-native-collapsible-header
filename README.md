@@ -15,11 +15,13 @@
 ```javascript
 type collapsible = {
   backgroundColor?: string,
+  flatList?: boolean, // default = false
   max?: number, // default = 44
   min?: number, // default = 20 (ios), 24 (android)
   renderContent: any, // <Component />
   renderHeader: any // <Component />
   // ScrollView props can be passed
+  // FlatList props can be passed
 };
 ```
 
@@ -62,6 +64,7 @@ export default class Example extends Component {
       <Collapsible
         backgroundColor={color}
         renderHeader={<Header />}
+        // renderContent is not needed if using FlatList
         renderContent={
           <View>
             <Content />
@@ -76,6 +79,11 @@ export default class Example extends Component {
             <Content gray />
           </View>
         }
+
+        // flatList
+        // data={Array(10).fill()}
+        // keyExtractor={(item, i) => String(i)}
+        // renderItem={({ index }) => <Content gray={index % 2 !== 0} />}
       />
     );
   }

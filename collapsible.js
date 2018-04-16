@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import { Animated, Platform, ScrollView, View } from 'react-native';
+import { Animated, FlatList, Platform, ScrollView, View } from 'react-native';
 
 import PropTypes from 'prop-types';
-
-const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 export default class Collapsible extends Component {
   static propTypes = {
     backgroundColor: PropTypes.string,
+    flatList: PropTypes.bool,
     max: PropTypes.number,
     min: PropTypes.number,
-    renderContent: PropTypes.any.isRequired,
+    renderContent: PropTypes.any,
     renderHeader: PropTypes.any.isRequired
   };
 
   static defaultProps = {
     backgroundColor: 'transparent',
+    flatList: false,
     max: 44,
-    min: Platform.select({ ios: 20, android: 24 })
+    min: Platform.select({ ios: 20, android: 24 }),
+    renderContent: null
   };
 
   scroll = new Animated.Value(0);
@@ -41,9 +42,14 @@ export default class Collapsible extends Component {
     outputRange: [1, 0]
   });
 
+  AnimatedComponent = Animated.createAnimatedComponent(
+    this.props.flatList ? FlatList : ScrollView
+  );
+
   render() {
     const {
       backgroundColor,
+      flatList,
       max,
       min,
       renderContent,
@@ -80,14 +86,14 @@ export default class Collapsible extends Component {
 
     return (
       <View style={styles.full}>
-        <AnimatedScrollView
+        <this.AnimatedComponent
           contentContainerStyle={contentContainerStyle}
           onScroll={onScroll}
           scrollEventThrottle={16}
           style={contentStyle}
           {...scrollViewProps}>
           {renderContent}
-        </AnimatedScrollView>
+        </this.AnimatedComponent>
 
         <Animated.View style={headerContainerStyle} pointerEvents="none">
           <Animated.View style={headerStyle}>{renderHeader}</Animated.View>
