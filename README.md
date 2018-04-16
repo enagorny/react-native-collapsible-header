@@ -15,12 +15,12 @@
 ```javascript
 type collapsible = {
   backgroundColor?: string,
-  max?: number,             // default = 44
-  min?: number,             // default = 20 (ios), 24 (android)
-  renderContent: any        // <Component />
-  renderHeader: any,        // <Component />
-                            // ScrollView props can be passed
- };
+  max?: number, // default = 44
+  min?: number, // default = 20 (ios), 24 (android)
+  renderContent: any, // <Component />
+  renderHeader: any // <Component />
+  // ScrollView props can be passed
+};
 ```
 
 ## Example
@@ -55,8 +55,6 @@ const color = '#0f9d58';
 export default class Example extends Component {
   componentWillMount() {
     StatusBar.setBarStyle('light-content', true);
-
-    if (Platform.OS === 'android') StatusBar.setBackgroundColor(color, true);
   }
 
   render() {
