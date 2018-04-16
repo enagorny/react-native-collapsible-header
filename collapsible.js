@@ -1,61 +1,103 @@
 import React, { Component } from 'react';
 import { Animated, Platform, ScrollView, View } from 'react-native';
 
+import PropTypes from 'prop-types';
+
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 export default class Collapsible extends Component {
+  static propTypes = {
+    backgroundColor: PropTypes.string,
+    max: PropTypes.number,
+    min: PropTypes.number,
+    renderContent: PropTypes.any.isRequired,
+    renderHeader: PropTypes.any.isRequired
+  };
+
+  static defaultProps = {
+    backgroundColor: 'transparent',
+    max: 44,
+    min: Platform.select({ ios: 20, android: 24 })
+  };
+
   scroll = new Animated.Value(0);
-  offset = new Animated.Value(0);
 
-  min = this.props.min === false ? 0 : Platform.select({ ios: 20, android: 0 });
-  max = (this.props.max || 44) + this.min;
+  max = this.props.max + this.props.min;
 
-  position = Animated.add(this.scroll, this.offset).interpolate({
+  contentPosition = this.scroll.interpolate({
     inputRange: [0, this.max],
-    outputRange: [0, this.min - this.max],
+    outputRange: [this.max, this.props.min],
     extrapolate: 'clamp'
   });
 
-  opacity = this.scroll.interpolate({
+  headerPosition = this.scroll.interpolate({
+    inputRange: [0, this.max],
+    outputRange: [0, this.props.min - this.max],
+    extrapolate: 'clamp'
+  });
+
+  headerOpacity = this.scroll.interpolate({
     inputRange: [0, this.max],
     outputRange: [1, 0]
   });
 
-  height = this.scroll.interpolate({
-    inputRange: [-this.max, 0, this.max],
-    outputRange: [this.max * 2, this.max, this.max]
-  });
-
   render() {
-    const { backgroundColor, ...props } = this.props;
+    const {
+      backgroundColor,
+      max,
+      min,
+      renderContent,
+      renderHeader,
+      ...scrollViewProps
+    } = this.props;
+
+    const onScroll = Animated.event(
+      [{ nativeEvent: { contentOffset: { y: this.scroll } } }],
+      { useNativeDriver: true }
+    );
+
+    const contentContainerStyle = [
+      { paddingBottom: this.props.min },
+      scrollViewProps.contentContainerStyle
+    ];
+
+    const contentStyle = [
+      { transform: [{ translateY: this.contentPosition }] },
+      scrollViewProps.style
+    ];
+
+    const headerContainerStyle = [
+      styles.header,
+      {
+        backgroundColor,
+        height: this.max,
+        paddingTop: min,
+        transform: [{ translateY: this.headerPosition }]
+      }
+    ];
+
+    const headerStyle = [styles.full, { opacity: this.headerOpacity }];
 
     return (
-      <View style={{ flex: 1, overflow: 'hidden' }}>
+      <View style={styles.full}>
         <AnimatedScrollView
-          {...props}
-          contentContainerStyle={{ paddingTop: this.max }}
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { y: this.scroll } } }
-          ])}
-          scrollEventThrottle={16}>
-          {this.props.renderContent}
+          contentContainerStyle={contentContainerStyle}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          style={contentStyle}
+          {...scrollViewProps}>
+          {renderContent}
         </AnimatedScrollView>
-        <Animated.View
-          style={{
-            backgroundColor,
-            height: this.props.bounce === false ? this.max : this.height,
-            left: 0,
-            paddingTop: this.min,
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            transform: [{ translateY: this.position }]
-          }}>
-          <Animated.View style={{ flex: 1, opacity: this.opacity }}>
-            {this.props.renderHeader}
-          </Animated.View>
+
+        <Animated.View style={headerContainerStyle} pointerEvents="none">
+          <Animated.View style={headerStyle}>{renderHeader}</Animated.View>
         </Animated.View>
       </View>
     );
   }
 }
+
+const styles = {
+  full: { flex: 1 },
+  header: { left: 0, position: 'absolute', right: 0, top: 0 }
+};

@@ -1,11 +1,15 @@
 {
   "license": "MIT",
   "name": "react-native-collapsible-header",
-  "description": "A collapsible header/navbar component for React Native.",
-  "version": "0.0.11",
+  "description": "A collapsible header component for React Native.",
+  "version": "0.0.12",
   "main": "collapsible.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sonaye/react-native-collapsible-header.git"
+  },
+  "files": ["collapsible.js"],
+  "dependencies": {
+    "prop-types": "^15.6.1"
   }
 }
