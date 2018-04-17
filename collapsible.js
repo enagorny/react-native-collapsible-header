@@ -95,7 +95,7 @@ export default class Collapsible extends Component {
           {renderContent}
         </this.AnimatedComponent>
 
-        <Animated.View style={headerContainerStyle} pointerEvents="none">
+        <Animated.View style={headerContainerStyle}>
           <Animated.View style={headerStyle}>{renderHeader}</Animated.View>
         </Animated.View>
       </View>

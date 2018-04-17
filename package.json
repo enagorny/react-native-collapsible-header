@@ -2,7 +2,7 @@
   "license": "MIT",
   "name": "react-native-collapsible-header",
   "description": "A collapsible header component for React Native.",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "collapsible.js",
   "repository": {
     "type": "git",
