@@ -28,8 +28,8 @@ type collapsible = {
 ## Example
 
 ```javascript
-import React, { Component } from 'react';
-import { Platform, StatusBar, Text, View } from 'react-native';
+import React from 'react';
+import { StatusBar, Text, View } from 'react-native';
 
 import Collapsible from 'react-native-collapsible-header';
 
@@ -54,7 +54,7 @@ const Content = ({ gray }) => {
 
 const color = '#0f9d58';
 
-export default class Example extends Component {
+export default class Example extends React.PureComponent {
   componentWillMount() {
     StatusBar.setBarStyle('light-content', true);
   }
